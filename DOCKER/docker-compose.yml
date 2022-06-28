@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  dbmysql:
+    image: mysql:latest
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_USER=dev
+      - MYSQL_ROOT_PASSWORD=local
+      - MYSQL_DATABASE=db
+    ports:
+      - 3306:3306
+  scriptrun:
+    build: .
+    environment:
+      - MYSQL_USER=dev
+      - MYSQL_PASSWORD=local
+      - MYSQL_DATABASE=db
+      - MYSQL_HOST=localhost
+volumes:
+  db_data: 
