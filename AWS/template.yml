@@ -23,9 +23,9 @@ Resources:
       Environment:
         Variables:
           MYSQL_HOST: 'ip del host'
-          MYSQL_USER: dev
-          MYSQL_PASSWORD: local
-          MYSQL_DATABASE: db
+          MYSQL_USER: user_code
+          MYSQL_PASSWORD: p4ssw0rd
+          MYSQL_DATABASE: stori_db
   PermisosAdminTrans:
     Type: AWS::Lambda::Permission
     DependsOn:

@@ -66,9 +66,15 @@ def lambda_handler(event, context):
         bd=os.environ.get('MYSQL_DATABASE')
         miConexion = MySQLdb.connect(host=os.environ.get('MYSQL_HOST'), user=os.environ.get('MYSQL_USER'), passwd=os.environ.get('MYSQL_PASSWORD'), db=os.environ.get('MYSQL_DATABASE'))
         cur = miConexion.cursor()
-        cur.execute(f'CREATE TABLE IF NOT EXISTS {bd}.transactions(Id INT AUTO_INCREMENT PRIMARY KEY,Date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,Transactions VARCHAR(255) NOT NULL);')
+        cur.execute(f'CREATE TABLE IF NOT EXISTS {bd}.transactions(Id INT AUTO_INCREMENT PRIMARY KEY,Date DATETIME NOT NULL,Transactions VARCHAR(255) NOT NULL);')
+        valores=[]
         for i in df.index:
-            cur.execute(f'INSERT INTO transactions (Date, Transactions) VALUES ({df["Date"][i]}, {df["Transactions"][i]});')
+            fecha=datetime.strptime(df["Date"][i], '%m/%d')
+            valores.append((fecha, df["Transactions"][i]))
+        print(valores)
+        string_query="""INSERT INTO transactions (Date, Transactions) VALUES (%s, %s);"""
+        cur.executemany(string_query, valores)
+        miConexion.commit()
         miConexion.close()
         print('Almacenado en BBDD...')
 
